@@ -100,7 +100,9 @@
     PDF.data = data;
     
     //MaxC 2015-02-07
-    CFRelease(myPDFData);
+    if (myPDFData) {
+        CFRelease(myPDFData);
+    }
     
     return PDF;
 }
