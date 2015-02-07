@@ -98,6 +98,10 @@
     CGDataProviderRef provider = CGDataProviderCreateWithCFData(myPDFData);
     MTPDF *PDF = [[MTPDF alloc] initWithReference:CGPDFDocumentCreateWithProvider(provider)];
     PDF.data = data;
+    
+    //MaxC 2015-02-07
+    CFRelease(myPDFData);
+    
     return PDF;
 }
 
