@@ -10,7 +10,7 @@
 @interface MTPDF : NSObject
 
 
-@property (readonly)            CGPDFDocumentRef    reference;
+@property (readwrite)           CGPDFDocumentRef    reference;
 @property (readonly)            NSData              *data;
 @property (readonly)            NSArray             *pages;
 @property (readonly)            BOOL                allowsCopying;

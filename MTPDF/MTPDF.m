@@ -283,6 +283,15 @@
 	
 	CGPDFPageRelease(_reference);
 
+    if (pageDict) {
+        CFRelease(pageDict);
+    }
+				    
+    if (boxData) {
+        CFRelease(boxData);
+    }
+									    
+
 	return resultingImage;
 }
 
