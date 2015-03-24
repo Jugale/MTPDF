@@ -67,12 +67,12 @@
             _subject        = [self getKey:"Subject"        from:dict];
 
             NSString *creationDateString = [self getKey:"CreationDate" from:dict];
-            if (creationDateString)
+            if (creationDateString && ![creationDateString isEqualToString:@""])
                 _creationDate = [self dateFromPDFDateString:creationDateString];
 
 
             NSString *modifiedDateString = [self getKey:"ModDate" from:dict];
-            if (modifiedDateString)
+            if (modifiedDateString && ![modifiedDateString isEqualToString:@""])
                 _modifiedDate = [self dateFromPDFDateString:modifiedDateString];
         }
     }
