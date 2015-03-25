@@ -255,12 +255,12 @@
     CGPDFPageRetain(_reference);
     
     CGSize size = _frame.size;
-    
+    CGRect rect = CGRectMake(0, 0, size.width, size.height) ;
     NSInteger rot = CGPDFPageGetRotationAngle(_reference);
-    if(rot) {
+    if(rot == 90 || rot == 270) {
         size = CGSizeMake(size.height, size.width);
+        rect = CGRectMake((size.width*ppp)/2, 0, size.width, size.height) ;
     }
-    CGRect rect = CGRectMake((size.width*ppp)/2, 0, size.width, size.height) ;
     size.width  *= ppp;
     size.height *= ppp;
     
