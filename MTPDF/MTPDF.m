@@ -252,47 +252,52 @@
 
 - (UIImage *)imageWithPixelsPerPoint:(NSInteger)ppp
 {
-	CGPDFPageRetain(_reference);
-	
+    CGPDFPageRetain(_reference);
+    
     CGSize size = _frame.size;
-    CGRect rect = CGRectMake(0, 0, size.width, size.height) ;
+    
+    NSInteger rot = CGPDFPageGetRotationAngle(_reference);
+    if(rot) {
+        size = CGSizeMake(size.height, size.width);
+    }
+    CGRect rect = CGRectMake((size.width*ppp)/2, 0, size.width, size.height) ;
     size.width  *= ppp;
     size.height *= ppp;
-
+    
     UIGraphicsBeginImageContext(size);
-
-	CGContextRef context = UIGraphicsGetCurrentContext();
-
-	CGContextSaveGState(context);
-	CGAffineTransform transform = CGPDFPageGetDrawingTransform(_reference, kCGPDFMediaBox, rect, 0, true);
-	CGContextConcatCTM(context, transform);
-
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGContextSaveGState(context);
+    CGAffineTransform transform = CGPDFPageGetDrawingTransform(_reference, kCGPDFMediaBox, rect, 2*rot, true);
+    CGContextConcatCTM(context, transform);
+    
     CGContextTranslateCTM(context, 0, size.height);
     CGContextScaleCTM(context, ppp, -ppp);
-
+    
     CFMutableDictionaryRef pageDict = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
     CFDataRef boxData = CFDataCreate(NULL, (const UInt8 *)&rect, sizeof(CGRect));
     CFDictionarySetValue(pageDict, kCGPDFContextMediaBox, boxData);
-
-	CGContextDrawPDFPage(context, _reference);
-
-	CGContextRestoreGState(context);
-
-	UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
-	UIGraphicsEndImageContext();
-	
-	CGPDFPageRelease(_reference);
-
+    
+    CGContextDrawPDFPage(context, _reference);
+    
+    CGContextRestoreGState(context);
+    
+    UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    CGPDFPageRelease(_reference);
+    
     if (pageDict) {
         CFRelease(pageDict);
     }
-				    
+    
     if (boxData) {
         CFRelease(boxData);
     }
-									    
-
-	return resultingImage;
+    
+    
+    return resultingImage;
 }
 
 
