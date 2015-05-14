@@ -272,7 +272,16 @@
     CGAffineTransform transform = CGPDFPageGetDrawingTransform(_reference, kCGPDFMediaBox, rect, 2*rot, true);
     CGContextConcatCTM(context, transform);
     
-    CGContextTranslateCTM(context, 0, size.height);
+    if(_frame.origin.y < 0){
+        CGContextTranslateCTM(context, 0, _frame.origin.y);
+    }
+    //    else if(_frame.origin.x < 0) {
+    //      CGContextTranslateCTM(context, 0, 0);
+    //    }
+    else {
+        CGContextTranslateCTM(context, 0, size.height);
+    }
+
     CGContextScaleCTM(context, ppp, -ppp);
     
     CFMutableDictionaryRef pageDict = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
